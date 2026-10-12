@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Admin · GoZamindar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#FEFBF6;--sand:#F4F0E6;--stone:#E8E2D4;--olive:#4B4D39;--olive2:#383A2A;--muted:#5C5E47;--ink:#1E2016;--line:rgba(75,77,57,.16)}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:Jost,system-ui,sans-serif;font-weight:300;background:var(--sand);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:var(--olive)}button,input,select{font:inherit;color:inherit}
+.serif{font-family:'Cormorant Garamond',serif;font-weight:300}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;border-radius:999px;padding:11px 20px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--olive);background:var(--olive);color:var(--paper);white-space:nowrap}
+.btn:hover{background:var(--olive2)}.btn:disabled{opacity:.55;cursor:default}
+.btn.out{background:transparent;color:var(--olive);border-color:rgba(75,77,57,.4)}.btn.out:hover{background:var(--olive);color:var(--paper)}
+.btn.sm{padding:7px 13px;font-size:11px}.btn.red{background:transparent;color:#9B2C2C;border-color:#E3B4B4}.btn.red:hover{background:#9B2C2C;color:#fff}
+.ico{width:32px;height:32px;padding:0;border-radius:50%;background:transparent;color:var(--olive);border:1px solid rgba(75,77,57,.3);cursor:pointer}
+.in{width:100%;border:1px solid rgba(75,77,57,.28);background:var(--paper);padding:11px 13px;font-size:15px;outline:none}.in:focus{border-color:var(--olive)}
+.lbl{display:flex;flex-direction:column;gap:7px;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.lbl .in{letter-spacing:0;text-transform:none;color:var(--ink)}
+.card{background:var(--paper);border:1px solid var(--line)}
+.err{border:1px solid #E3B4B4;background:#FBEFEF;color:#8A2525;padding:9px 12px;font-size:14px}
+.hide{display:none!important}
+header.top{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:12px clamp(14px,4vw,44px);background:rgba(254,251,246,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.tabs{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:999px;background:var(--paper)}
+.tabs button{border:0;background:transparent;border-radius:999px;padding:8px 15px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;color:var(--olive)}
+.tabs button.on{background:var(--olive);color:var(--paper)}
+.row{display:grid;grid-template-columns:96px minmax(0,1.4fr) minmax(0,1fr) auto;gap:16px;align-items:center;padding:10px}
+.thumb{aspect-ratio:4/3;background:var(--stone) center/cover no-repeat}
+.trunc{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.acts{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:flex-end}
+@media (max-width:760px){.row{grid-template-columns:72px minmax(0,1fr)}.row .meta,.row .acts{grid-column:1/-1;justify-content:flex-start}}
+.drawer{position:fixed;inset:0;z-index:40;background:rgba(30,32,22,.5);display:flex;justify-content:flex-end}
+.drawer form{width:100%;max-width:660px;height:100%;overflow-y:auto;background:var(--paper);display:flex;flex-direction:column}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.wide{grid-column:1/-1}@media (max-width:560px){.grid2{grid-template-columns:1fr}}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:60;background:var(--ink);color:var(--paper);padding:12px 20px;font-size:14px}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line)}th{font-weight:400;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.pill{display:inline-block;border-radius:999px;padding:3px 10px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--stone)}.pill.login{background:var(--olive);color:var(--paper)}.pill.delete,.pill.failed{background:#F4D9D9;color:#8A2525}
+pre.log{margin:0;max-height:52vh;overflow:auto;background:var(--ink);color:#E8E2D4;padding:16px;font-size:12px;line-height:1.5;white-space:pre-wrap}
+</style>
+</head>
+<body>
+
+<!-- Login -->
+<div id="login" class="hide" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 18px">
+  <form id="loginForm" class="card" style="width:100%;max-width:420px;padding:clamp(24px,5vw,40px);display:flex;flex-direction:column;gap:18px;box-shadow:0 40px 80px -50px rgba(30,32,22,.5)">
+    <img src="/images/logo.png" alt="GoZamindar" style="height:32px;width:auto;align-self:flex-start">
+    <div><h1 class="serif" style="margin:0;font-size:36px;line-height:1">Admin sign in</h1><p style="margin:8px 0 0;font-size:14px;color:var(--muted)">Manage the property cards on gozamindar.in.</p></div>
+    <label class="lbl">Email<input class="in" type="email" name="email" autocomplete="username" required></label>
+    <label class="lbl">Password<span style="position:relative"><input class="in" type="password" name="password" autocomplete="current-password" required style="padding-right:64px"><button type="button" id="togglePw" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);border:0;background:none;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);cursor:pointer">Show</button></span></label>
+    <div id="loginErr" class="err hide"></div>
+    <button class="btn" style="width:100%">Sign in</button>
+  </form>
+</div>
+
+<!-- App -->
+<div id="app" class="hide">
+  <header class="top">
+    <div style="display:flex;align-items:center;gap:14px"><img src="/images/logo.png" alt="GoZamindar" style="height:28px;width:auto"><span style="border-left:1px solid var(--line);padding-left:14px;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">Admin</span></div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span id="who" style="font-size:14px;color:var(--muted)"></span><button class="btn out sm" id="buildBtn">Build website</button><button class="btn sm" id="logoutBtn">Log out</button></div>
+  </header>
+  <main style="max-width:1240px;margin:0 auto;padding:28px clamp(14px,4vw,44px) 60px;display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between">
+      <div><h1 class="serif" style="margin:0;font-size:clamp(32px,4vw,46px);line-height:1">Properties</h1><p id="summary" style="margin:8px 0 0;font-size:14px;color:var(--muted)"></p></div>
+      <nav class="tabs"><button data-tab="props" class="on">Properties</button><button data-tab="activity">Login &amp; activity</button></nav>
+    </div>
+    <section id="tab-props" style="display:flex;flex-direction:column;gap:14px">
+      <div style="display:flex;flex-wrap:wrap;gap:10px"><input id="q" class="in" placeholder="Search by name or locality" style="max-width:360px;flex:1"><button class="btn" id="addBtn" style="margin-left:auto">+ Add property</button></div>
+      <div id="list" style="display:flex;flex-direction:column;gap:10px"></div>
+    </section>
+    <section id="tab-activity" class="hide card" style="overflow-x:auto"><table><thead><tr><th>When</th><th>Action</th><th>Detail</th><th>User</th><th>Device</th></tr></thead><tbody id="actBody"></tbody></table></section>
+  </main>
+</div>
+
+<!-- Editor -->
+<div id="drawer" class="drawer hide">
+  <form id="editForm">
+    <div style="position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;background:var(--paper);border-bottom:1px solid var(--line)"><h2 id="edTitle" class="serif" style="margin:0;font-size:30px">Add property</h2><button type="button" class="ico" data-close>✕</button></div>
+    <div class="grid2" style="padding:22px">
+      <div class="wide"><span class="lbl">Photo</span>
+        <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:8px">
+          <div id="edThumb" class="thumb" style="width:170px;border:1px solid var(--line)"></div>
+          <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:200px"><label class="btn out sm" style="align-self:flex-start;cursor:pointer"><span id="upTxt">Upload image</span><input id="file" type="file" accept="image/png,image/jpeg,image/webp" hidden></label><input class="in" name="photo" placeholder="…or paste an image URL / path" style="font-size:13px;padding:8px 11px"></div>
+        </div>
+      </div>
+      <label class="lbl">Project name *<input class="in" name="name" required placeholder="e.g. Raghava Linq"></label>
+      <label class="lbl">Locality<input class="in" name="area" list="areas" placeholder="Kokapet"></label>
+      <label class="lbl wide">Address / location line<input class="in" name="loc" placeholder="Kokapet · beside Neopolis"></label>
+      <label class="lbl">Type<select class="in" name="type"><option>Flat</option><option>Villa</option></select></label>
+      <label class="lbl">Configuration<input class="in" name="bhk" placeholder="3 &amp; 4 BHK"></label>
+      <label class="lbl">Sizes<input class="in" name="size" placeholder="1,800–2,400 sft"></label>
+      <label class="lbl">Possession<input class="in" name="poss" placeholder="Dec 2027"></label>
+      <label class="lbl">Landowner price *<input class="in" name="price" required placeholder="₹8,500 or ₹2.1 Cr"></label>
+      <label class="lbl">Price unit<input class="in" name="unit" placeholder="/ sft"></label>
+      <label class="lbl">Price per sft (number)<input class="in" name="psf" type="number" placeholder="8500"></label>
+      <label class="lbl">Market price<input class="in" name="mkt" placeholder="₹10,500 / sft"></label>
+      <label class="lbl wide">Payment / RERA note<input class="in" name="pay" placeholder="Loan available · RERA P0…"></label>
+      <label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" name="ready"> Ready to move</label>
+      <label style="display:flex;gap:10px;align-items:center;font-size:14px"><input type="checkbox" name="visible"> Show on website</label>
+    </div>
+    <div id="edErr" class="err hide" style="margin:0 22px 10px"></div>
+    <div style="position:sticky;bottom:0;margin-top:auto;display:flex;justify-content:flex-end;gap:10px;padding:14px 22px;background:var(--paper);border-top:1px solid var(--line)"><button type="button" class="btn out" data-close>Cancel</button><button class="btn" id="saveBtn">Save</button></div>
+  </form>
+</div>
+<datalist id="areas"><option>Kokapet</option><option>Neopolis</option><option>Financial District</option><option>Narsingi</option><option>Puppalguda</option><option>Gachibowli</option><option>Tellapur</option><option>Kollur</option><option>Shaikpet</option></datalist>
+
+<!-- Build log -->
+<div id="buildModal" class="drawer hide" style="align-items:center;justify-content:center;padding:20px">
+  <div class="card" style="width:100%;max-width:820px;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)"><h2 class="serif" style="margin:0;font-size:26px" id="buildTitle">Building website…</h2><button type="button" class="ico" id="buildClose">✕</button></div>
+    <pre class="log" id="buildLog"></pre>
+    <p id="buildNext" class="hide" style="margin:0;padding:14px 18px;font-size:14px">Done. Upload everything inside the <b>dist</b> folder (including the hidden <b>.htaccess</b>) to Hostinger → File Manager → <b>public_html</b>.</p>
+  </div>
+</div>
+
+<div id="toast" class="toast hide"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const api = async (path, opts = {}) => {
+  const r = await fetch(path, { headers: { "Content-Type": "application/json" }, ...opts });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(d.error || "Request failed");
+  return d;
+};
+const imgUrl = (p) => p.photo || (p.wix ? `https://static.wixstatic.com/media/${p.wix}/v1/fill/w_400,h_300,al_c,q_80,enc_auto/x.jpg` : "/images/placeholder.png");
+const when = (iso) => new Date(iso).toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.classList.remove("hide"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.add("hide"), 2600); };
+const device = (ua) => !ua ? "—" : `${/Edg\//.test(ua) ? "Edge" : /Chrome\//.test(ua) ? "Chrome" : /Safari\//.test(ua) ? "Safari" : /Firefox\//.test(ua) ? "Firefox" : "Browser"} · ${/Android/.test(ua) ? "Android" : /iPhone|iPad/.test(ua) ? "iOS" : /Windows/.test(ua) ? "Windows" : /Mac OS/.test(ua) ? "macOS" : "Other"}`;
+
+let projects = [], editing = -1;
+
+async function boot() {
+  try { const me = await api("/api/me"); start(me.email); } catch { $("#login").classList.remove("hide"); }
+}
+$("#togglePw").onclick = (e) => { const i = $("#loginForm").password; i.type = i.type === "password" ? "text" : "password"; e.target.textContent = i.type === "password" ? "Show" : "Hide"; };
+$("#loginForm").onsubmit = async (e) => {
+  e.preventDefault(); const f = e.target; const err = $("#loginErr"); err.classList.add("hide");
+  try { const me = await api("/api/login", { method: "POST", body: JSON.stringify({ email: f.email.value, password: f.password.value }) }); f.reset(); $("#login").classList.add("hide"); start(me.email); }
+  catch (x) { err.textContent = x.message; err.classList.remove("hide"); }
+};
+$("#logoutBtn").onclick = async () => { await api("/api/logout", { method: "POST" }); location.reload(); };
+
+async function start(email) {
+  $("#who").textContent = email; $("#app").classList.remove("hide");
+  projects = await api("/api/projects"); render();
+}
+async function persist(action, detail) {
+  const d = await api("/api/projects", { method: "PUT", body: JSON.stringify({ projects, action, detail }) });
+  projects = d.projects; render();
+}
+
+function render() {
+  const q = $("#q").value.toLowerCase();
+  const live = projects.filter((p) => p.visible !== false).length;
+  $("#summary").textContent = `${projects.length} total · ${live} shown on website`;
+  $("#list").innerHTML = projects.map((p, i) => ({ p, i })).filter(({ p }) => `${p.name} ${p.area} ${p.loc}`.toLowerCase().includes(q)).map(({ p, i }) => `
+    <div class="card row" style="${p.visible === false ? "opacity:.55" : ""}">
+      <div class="thumb" style="background-image:url('${esc(imgUrl(p))}')"></div>
+      <div style="min-width:0"><div class="serif trunc" style="font-size:23px;font-weight:400;line-height:1.15">${esc(p.name)}</div><div class="trunc" style="font-size:13px;color:var(--muted)">${esc(p.loc)} · ${esc(p.bhk)} · ${esc(p.size)}</div></div>
+      <div class="meta" style="display:flex;flex-wrap:wrap;gap:4px 16px;font-size:13px"><span><span style="color:var(--muted)">Landowner</span> ${esc(p.price)} ${esc(p.unit)}</span>${p.mkt ? `<span><span style="color:var(--muted)">Market</span> ${esc(p.mkt)}</span>` : ""}<span style="color:var(--muted)">${p.ready ? "Ready to move" : esc(p.poss)}</span></div>
+      <div class="acts"><button class="ico" title="Move up" data-up="${i}">↑</button><button class="ico" title="Move down" data-down="${i}">↓</button><button class="btn out sm" data-vis="${i}">${p.visible === false ? "Hidden" : "Live"}</button><button class="btn out sm" data-edit="${i}">Edit</button><button class="btn red sm" data-del="${i}">Delete</button></div>
+    </div>`).join("") || `<div class="card" style="padding:50px 20px;text-align:center;color:var(--muted)">No properties match.</div>`;
+}
+$("#q").oninput = render;
+$("#list").onclick = async (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const d = b.dataset;
+  if (d.edit) return openEditor(+d.edit);
+  if (d.del) { const p = projects[+d.del]; if (!confirm(`Delete “${p.name}”?`)) return; projects.splice(+d.del, 1); await persist("delete", p.name); toast("Deleted."); }
+  if (d.vis) { const p = projects[+d.vis]; p.visible = p.visible === false; await persist(p.visible ? "show" : "hide", p.name); }
+  if (d.up || d.down) { const i = +(d.up ?? d.down), j = d.up ? i - 1 : i + 1; if (j < 0 || j >= projects.length) return; [projects[i], projects[j]] = [projects[j], projects[i]]; await persist("reorder", projects[j].name); }
+};
+
+// Editor
+const F = $("#editForm");
+function openEditor(i) {
+  editing = i; const p = i >= 0 ? projects[i] : { type: "Flat", unit: "/ sft", visible: true, area: "Kokapet" };
+  $("#edTitle").textContent = i >= 0 ? "Edit property" : "Add property";
+  $("#saveBtn").textContent = i >= 0 ? "Save changes" : "Add property";
+  for (const k of ["name", "area", "loc", "type", "bhk", "size", "poss", "price", "unit", "psf", "mkt", "pay"]) F[k].value = p[k] ?? "";
+  F.photo.value = p.photo || ""; F.ready.checked = !!p.ready; F.visible.checked = p.visible !== false;
+  F.dataset.wix = p.wix || ""; thumb(); $("#edErr").classList.add("hide"); $("#drawer").classList.remove("hide");
+}
+function thumb() { $("#edThumb").style.backgroundImage = `url('${imgUrl({ photo: F.photo.value, wix: F.dataset.wix })}')`; }
+F.photo.oninput = thumb;
+document.querySelectorAll("[data-close]").forEach((b) => (b.onclick = () => $("#drawer").classList.add("hide")));
+$("#addBtn").onclick = () => openEditor(-1);
+$("#file").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  if (f.size > 15 * 1024 * 1024) return toast("Image must be under 15 MB.");
+  $("#upTxt").textContent = "Uploading…";
+  const dataUrl = await new Promise((ok) => { const r = new FileReader(); r.onload = () => ok(r.result); r.readAsDataURL(f); });
+  try { const d = await api("/api/upload", { method: "POST", body: JSON.stringify({ name: F.name.value, dataUrl }) }); F.photo.value = d.path; F.dataset.wix = ""; thumb(); }
+  catch (x) { toast(x.message); }
+  $("#upTxt").textContent = "Upload image"; e.target.value = "";
+};
+F.onsubmit = async (e) => {
+  e.preventDefault();
+  const old = editing >= 0 ? projects[editing] : {};
+  const p = { ...old };
+  for (const k of ["name", "area", "loc", "type", "bhk", "size", "poss", "price", "unit", "mkt", "pay"]) p[k] = F[k].value.trim();
+  p.psf = F.psf.value ? Number(F.psf.value) : null;
+  p.ready = F.ready.checked; p.visible = F.visible.checked;
+  if (F.photo.value.trim()) { p.photo = F.photo.value.trim(); delete p.wix; } else delete p.photo;
+  if (!p.mkt) delete p.mkt;
+  try {
+    if (editing >= 0) projects[editing] = p; else projects.unshift(p);
+    await persist(editing >= 0 ? "update" : "create", p.name);
+    $("#drawer").classList.add("hide"); toast(editing >= 0 ? "Saved." : "Property added.");
+  } catch (x) { const err = $("#edErr"); err.textContent = x.message; err.classList.remove("hide"); }
+};
+
+// Tabs & activity
+document.querySelectorAll(".tabs button").forEach((b) => (b.onclick = async () => {
+  document.querySelectorAll(".tabs button").forEach((x) => x.classList.toggle("on", x === b));
+  $("#tab-props").classList.toggle("hide", b.dataset.tab !== "props");
+  $("#tab-activity").classList.toggle("hide", b.dataset.tab !== "activity");
+  if (b.dataset.tab === "activity") {
+    const a = await api("/api/activity");
+    $("#actBody").innerHTML = a.map((x) => `<tr><td style="white-space:nowrap">${when(x.at)}</td><td><span class="pill ${x.action.split(" ")[0]}">${esc(x.action)}</span></td><td>${esc(x.detail) || "—"}</td><td style="color:var(--muted)">${esc(x.email)}</td><td style="color:var(--muted);font-size:12px">${device(x.device)}</td></tr>`).join("") || `<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:40px">No activity yet.</td></tr>`;
+  }
+}));
+
+// Build
+$("#buildBtn").onclick = async () => {
+  const m = $("#buildModal"), log = $("#buildLog"); log.textContent = ""; $("#buildNext").classList.add("hide"); $("#buildTitle").textContent = "Building website…"; m.classList.remove("hide");
+  const r = await fetch("/api/build", { method: "POST" }); const rd = r.body.getReader(); const dec = new TextDecoder();
+  for (;;) { const { done, value } = await rd.read(); if (done) break; log.textContent += dec.decode(value); log.scrollTop = log.scrollHeight; }
+  const ok = log.textContent.includes("__BUILD_OK__");
+  $("#buildTitle").textContent = ok ? "Website built ✓" : "Build failed"; if (ok) $("#buildNext").classList.remove("hide");
+};
+$("#buildClose").onclick = () => $("#buildModal").classList.add("hide");
+
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  @apply bg-paper pb-14 font-sans text-olive antialiased md:pb-0;
+  overflow-x: clip;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+img, video, iframe { max-width: 100%; }
+h1, h2, h3, p { overflow-wrap: break-word; }
+a { @apply text-olive no-underline; }
+a:hover { @apply text-olive-dark; }
+
+@layer components {
+  .eyebrow { @apply text-[11px] uppercase tracking-eyebrow text-olive-muted; }
+  .h2 { @apply font-serif text-[clamp(30px,4vw,60px)] font-light leading-[1.05]; }
+  .btn { @apply inline-flex cursor-pointer items-center justify-center rounded-full px-5 py-3.5 text-center text-xs uppercase tracking-btn transition-colors sm:whitespace-nowrap sm:px-7 sm:py-4; }
+  .btn-olive { @apply btn bg-olive text-paper hover:bg-olive-dark hover:text-paper; }
+  .btn-outline { @apply btn border border-olive/40 text-olive hover:bg-olive hover:text-paper; }
+  .btn-ghost-light { @apply btn border border-paper/60 text-paper hover:bg-paper/15 hover:text-paper; }
+  .btn-light { @apply btn bg-paper text-olive hover:bg-stone hover:text-olive; }
+  .field { @apply w-full border border-olive/30 bg-paper px-3.5 py-3 text-[15px] normal-case tracking-normal text-olive outline-none transition-colors focus:border-olive; }
+  .label { @apply flex flex-col gap-2 text-[10px] uppercase tracking-label text-olive-muted; }
+  .section-x { @apply px-[clamp(20px,5vw,72px)]; }
+  .section-y { @apply py-[clamp(56px,8vw,120px)]; }
+  .prose-gz p { @apply mb-4 max-w-[62ch] text-pretty text-[15px] leading-[1.8] text-olive-muted; }
+  .prose-gz h2 { @apply mb-4 mt-10 font-serif text-[clamp(26px,5vw,32px)] font-light leading-tight text-olive; }
+}
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+details > summary { list-style: none; }
+details > summary::-webkit-details-marker { display: none; }

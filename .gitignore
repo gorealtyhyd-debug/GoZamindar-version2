@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+dist
+.env*.local
+public/images/projects
+public/images/hero.jpg
+public/images/og.jpg
+public/images/contact.jpg
+
+data/admin-activity.json
+data/projects.json.bak
